@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1119">
+  <meta name="description" content="Номенклатура ночи — удобная читалка цветной маньхуа с сохранением прогресса и загрузкой ZIP/CBZ.">
+  <title>Номенклатура ночи — Читалка маньхуа</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/app.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script defer src="assets/app.js"></script>
+</head>
+<body data-theme="dark">
+  <div class="reading-line" id="readingLine" aria-hidden="true"></div>
+  <header class="topbar" id="topbar">
+    <div class="top-inner">
+      <a href="./" class="identity" id="homeLink" aria-label="Перейти к библиотеке">
+        <span class="identity-mark" aria-hidden="true">夜</span>
+        <span class="identity-names"><strong>НОМЕНКЛАТУРА НОЧИ</strong><small>Цветная маньхуа · читалка</small></span>
+      </a>
+      <nav class="top-actions" aria-label="Основная навигация">
+        <button class="top-btn" id="libraryBtn" type="button"><span class="top-btn-icon">▦</span><span>Главы</span></button>
+        <button class="top-btn accent" id="importBtn" type="button"><span class="top-btn-icon">＋</span><span>Добавить</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="app">
+    <section class="library" id="libraryView" aria-label="Библиотека глав">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="eyebrow"><span class="star">✦</span> ИСТОРИЯ МЕЖДУ ДВУМЯ МИРАМИ</p>
+          <h1>Когда время<br><em>перестаёт быть</em><br>привычным.</h1>
+          <p class="hero-desc">Один мальчишка. Два мира. Таинственный отсчёт. Читай иллюстрированные главы в правильном порядке — без рекламы и тяжёлых меню.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" id="resumeBtn" type="button">Начать чтение <span>↗</span></button>
+            <button class="ghost-btn" id="heroImportBtn" type="button">Загрузить главу <span>＋</span></button>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="moon"></div><div class="city city-back"></div><div class="city city-front"></div><div class="rainveil"></div>
+          <span class="hero-vertical">夜的命名術 · 2022</span>
+        </div>
+      </div>
+      <div class="section-title" id="chaptersHeader"><div><span class="eyebrow">БИБЛИОТЕКА</span><h2>Главы</h2></div><p id="librarySummary">Загружаем список…</p></div>
+      <div class="chapters-grid" id="chapterGrid" aria-live="polite"></div>
+      <div class="import-note"><div class="import-note-icon">↓</div><div><strong>Главы можно добавить прямо с телефона</strong><p>Выбери архив ZIP или CBZ. Изображения сохранятся в этом браузере, а место чтения восстановится после закрытия страницы. Если главы позже появятся на сайте, импорт больше не потребуется.</p></div><button type="button" class="note-btn" id="noteImportBtn">Импортировать</button></div>
+    </section>
+
+    <section class="reader" id="readerView" hidden aria-label="Чтение главы">
+      <div class="reader-top">
+        <button class="back-link" id="readerBackBtn" type="button">← Все главы</button>
+        <div class="reader-details"><span class="reader-kicker">НОМЕНКЛАТУРА НОЧИ</span><h1 id="readerHeading">Глава</h1><p id="readerInfo"></p></div>
+        <div class="reader-tools"><button type="button" class="tool-btn" id="settingsBtn" title="Настройки чтения" aria-label="Настройки чтения">⚙</button></div>
+      </div>
+      <div class="reader-status" id="readerStatus" hidden></div>
+      <div class="page-stack" id="pageStack" aria-label="Страницы маньхуа"></div>
+      <div class="reader-end" id="readerEnd" hidden>
+        <span class="chapter-done">✦ КОНЕЦ ГЛАВЫ</span><h2 id="endHeading">Продолжение следует</h2>
+        <div class="reader-end-buttons"><button type="button" id="prevChapter" class="ghost-btn">← Предыдущая</button><button type="button" id="nextChapter" class="primary-btn">Следующая →</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><span>Номенклатура ночи · Фанатская читательская версия</span><span>Адаптировано для смартфонов · <a href="https://github.com/WarfWar/Manhwa" target="_blank" rel="noopener noreferrer">Исходники на GitHub</a></span></footer>
+
+  <dialog id="importDialog" class="modal">
+    <div class="modal-inner"><div class="modal-head"><div><span class="eyebrow">МОЯ КОЛЛЕКЦИЯ</span><h2>Добавить главу</h2></div><button type="button" class="close-btn" id="importClose" aria-label="Закрыть">×</button></div>
+      <p class="modal-description">Выбери один или несколько архивов <strong>.zip / .cbz</strong>. Номер главы определится по названию файла; при необходимости его можно изменить.</p>
+      <label for="chapterSelect">Номер главы (если не найден в названии)</label><select id="chapterSelect" class="field"></select>
+      <label for="zipInput" class="dropbox" id="dropbox"><span class="upload-glyph">⇧</span><strong>Нажми, чтобы выбрать архивы</strong><small>Или перетащи их сюда на компьютере</small></label>
+      <input id="zipInput" type="file" accept=".zip,.cbz,application/zip,application/x-cbz" multiple hidden>
+      <div class="import-progress" id="importProgress" hidden><div class="import-progress-bar"><i id="importProgressFill"></i></div><p id="importProgressText">Импорт…</p></div>
+      <p class="modal-hint">В режиме инкогнито прогресс и импортированные страницы могут не сохраниться. Импорт работает после загрузки библиотеки JSZip.</p>
+    </div>
+  </dialog>
+
+  <dialog id="settingsDialog" class="modal settings-modal"><div class="modal-inner"><div class="modal-head"><div><span class="eyebrow">КОМФОРТ ЧТЕНИЯ</span><h2>Настройки</h2></div><button type="button" class="close-btn" id="settingsClose" aria-label="Закрыть">×</button></div>
+    <div class="setting-row"><label for="themeChoice">Цвет оформления</label><select class="field" id="themeChoice"><option value="dark">Тёмная</option><option value="black">Чёрная</option><option value="light">Светлая</option></select></div>
+    <div class="setting-row"><label for="widthChoice">Ширина страниц</label><select class="field" id="widthChoice"><option value="standard">Стандартная</option><option value="wide">Широкая</option><option value="edge">На всю ширину</option></select></div>
+    <div class="setting-row"><label for="gapChoice">Промежутки между страницами</label><select class="field" id="gapChoice"><option value="0">Без промежутков</option><option value="12">Компактные</option><option value="28">Большие</option></select></div>
+    <p class="modal-hint">Прокрутка использует обычную прокрутку страницы без внутренних вложенных областей.</p>
+  </div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

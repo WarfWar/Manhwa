@@ -166,6 +166,7 @@
     $('readingLine').style.width='0';
   }
   function setURL(id,replace) {
+    if (location.protocol === 'file:') return;
     const url = new URL(location.href);
     if(id){url.searchParams.set('chapter',id);} else {url.searchParams.delete('chapter');}
     history[replace ? 'replaceState':'pushState']({chapter:id||null},'',url.pathname+url.search+url.hash);

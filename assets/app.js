@@ -321,6 +321,18 @@
     for(let id=1;id<=100;id++){
       const opt=document.createElement('option');opt.value=String(id);opt.textContent='Глава '+id;$('chapterSelect').appendChild(opt);
     }
+    // Встроенный каталог: главы открываются даже из распакованной папки без сервера.
+    const embedded=$('embeddedCatalog');
+    if(embedded){
+      try{
+        const data=JSON.parse(embedded.textContent);
+        if(Array.isArray(data.chapters)){
+          const byId=new Map(baseChapters.map((c)=>[c.id,c]));
+          data.chapters.forEach((c)=>byId.set(c.id,{...(byId.get(c.id)||{}),...c}));
+          chapters=[...byId.values()].sort((a,b)=>a.id-b.id);
+        }
+      }catch(_){}
+    }
     try{
       const response=await fetch('data/catalog.json',{cache:'no-store'});
       if(response.ok){const catalog=await response.json();if(Array.isArray(catalog.chapters)){

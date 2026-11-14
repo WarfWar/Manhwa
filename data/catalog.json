@@ -208,6 +208,54 @@
           "height": 1672
         }
       ]
+    },
+    {
+      "id": 7,
+      "title": "Номер 010101",
+      "description": "Цин Чэнь впервые посещает зону чтения Тюрьмы №18, регистрирует ридер и удивляет Ли Шутуна своей памятью.",
+      "state": "ready",
+      "pages": [
+        {
+          "src": "chapters/07/01.webp",
+          "width": 900,
+          "height": 1599
+        },
+        {
+          "src": "chapters/07/02.webp",
+          "width": 900,
+          "height": 1599
+        },
+        {
+          "src": "chapters/07/03.webp",
+          "width": 900,
+          "height": 1599
+        },
+        {
+          "src": "chapters/07/04.webp",
+          "width": 900,
+          "height": 1599
+        },
+        {
+          "src": "chapters/07/05.webp",
+          "width": 900,
+          "height": 1599
+        },
+        {
+          "src": "chapters/07/06.webp",
+          "width": 900,
+          "height": 1565
+        },
+        {
+          "src": "chapters/07/07.webp",
+          "width": 900,
+          "height": 1565
+        },
+        {
+          "src": "chapters/07/08.webp",
+          "width": 900,
+          "height": 1599
+        }
+      ]
     }
   ]
 }
